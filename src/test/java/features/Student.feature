@@ -15,6 +15,16 @@ Feature: Student Feature
     When to update the name field in student data
     Then the Student name is updated
 
+  Scenario: Verify that student data is updated
+    Given to create the student data with updated age
+    When to update the age field in student data
+    Then the Student age is updated
+
+  Scenario: Verify that student details are displayed
+    Given the body
+    When creating a user
+    Then user details displayed
+
     Scenario: verify the error is thrown when the name is not given by student
       Given  student data without name
       When create a student data without name

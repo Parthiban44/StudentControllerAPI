@@ -120,6 +120,64 @@ public class MyStepdefs{
         Assert.assertEquals(putStudent_2.getName(),putResponseStud1.getName());
     }
 
+
+    Student putStudent_3;
+    int studId2;
+    Response putResponse2;
+    @Given("to create the student data with updated age")
+    public void toCreateTheStudentDataWithUpdatedAge() {
+        JSONObject testData = (JSONObject) data.get("createStudent");
+        putStudent_3 = new Student((long) testData.get("id"), (String) testData.get("name"),
+                (long) testData.get("age"), (String) testData.get("email"));
+        putResponse2 = given()
+                .body(putStudent_3)
+                .when().post(EndPoints.STUDENT_ENDPOINT)
+                .then().statusCode(200).extract().response();
+        JsonPath jsonPath=new JsonPath(putResponse2.asString());
+        studId2= jsonPath.getInt("id");
+    }
+
+
+    @When("to update the age field in student data")
+    public void toUpdateTheAgeFieldInStudentData() {
+        JSONObject testData = (JSONObject) data.get("updateStudentAge");
+        putStudent_3 = new Student((long) testData.get("id"), (String) testData.get("name"),
+                (long) testData.get("age"), (String) testData.get("email"));
+        putResponse2 = given()
+                .body(putStudent_3)
+                .when().put(EndPoints.STUDENT_ENDPOINT+"/"+studId2)
+                .then().statusCode(200).extract().response();
+    }
+
+
+    @Then("the Student age is updated")
+    public void theStudentAgeIsUpdated() throws JsonProcessingException {
+        Student putResponseStud2 = objectMapper.readValue(putResponse2.asString(),Student.class);
+        Assert.assertEquals(putStudent_3.getAge(),putResponseStud2.getAge());
+    }
+
+    Student student_8;
+    Response response_8,responseStudent;
+    @When("creating a user")
+    public void creatingAUser() throws JsonProcessingException {
+        JSONObject testData = (JSONObject) data.get("createStudent");
+        student_8 = new Student((long) testData.get("id"), (String) testData.get("name"),
+                (long) testData.get("age"), (String) testData.get("email"));
+        response_8 = given()
+                .body(student_8)
+                .when().post(EndPoints.STUDENT_ENDPOINT)
+                .then().statusCode(200).extract().response();
+    }
+
+
+    @Then("user details displayed")
+    public void userDetailsDisplayed() {
+        response_8 = given()
+                .body(student_8)
+                .when().post(EndPoints.STUDENT_ENDPOINT)
+                .then().statusCode(200).extract().response();
+    }
+
     Student student_3;
     Response response_2;
     @Given("student data without name")
@@ -222,19 +280,18 @@ public class MyStepdefs{
 
 
     Student student_7;
-    Response response_6,response_7;
+    Response response_6;
     int userID;
-
+    JSONObject testData;
     @Given("to Create the student data in postman")
     public void toCreateTheStudentDataInPostman() {
-        JSONObject testData = (JSONObject) data.get("createStudent_2");
-        student_6 = new Student((long) testData.get("id"), (String) testData.get("name"),
-                (long) testData.get("age"), (String) testData.get("email"));
+         testData = (JSONObject) data.get("createStudent_2");
     }
-
     @When("Create the student data")
     public void createTheStudentData() throws JsonProcessingException {
-
+         testData = (JSONObject) data.get("createStudent_2");
+        student_7 = new Student((long) testData.get("id"), (String) testData.get("name"),
+                (long) testData.get("age"), (String) testData.get("email"));
         response_6 = given()
                 .body(student_7)
                 .when().post(EndPoints.STUDENT_ENDPOINT)
@@ -242,20 +299,12 @@ public class MyStepdefs{
         jsonPath = new JsonPath(response_6.asString());
           userID=jsonPath.getInt("id");
     }
-
     @Then("student data is deleted")
     public void studentDataIsDeleted() {
-
-
-        response_7 = given()
+        response_6 = given()
                 .when().delete(EndPoints.STUDENT_ENDPOINT+"/" + userID)
                 .then()
                 .statusCode(200).extract().response();
     }
-
-
-
-
-
 
 }

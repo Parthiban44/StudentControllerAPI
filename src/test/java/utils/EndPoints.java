@@ -7,5 +7,4 @@ import java.net.URI;
 @Getter
 public class EndPoints {
     public static final String STUDENT_ENDPOINT ="/student" ;
-    //private static final String STUDENT_ENDPOINT = "/student";
 }

@@ -23,6 +23,12 @@
     "age": 24,
     "email": "parthibanvp@gmail.com"
   },
+  "updateStudentAge": {
+    "id": 8,
+    "name": "Parthiban V",
+    "age": 23,
+    "email": "parthibanvp@gmail.com"
+  },
   "createStudentWithoutEmail": {
     "id": 10,
     "name": "Parthiban",
